@@ -17,13 +17,11 @@ export const findUserByUsername = (username) => {
     return null;
 };
 
-
 export const findUserByCredentials = (username, password) => {
-    const index = users.findIndex.find((u) => u.username === username && u.password === password);
+    const index = users.findIndex(u => u.username === username && u.password === password);
     if (index !== -1) return users[index];
     return null;
 };
-
 
 export const createUser = (user) => users.push(user);
 

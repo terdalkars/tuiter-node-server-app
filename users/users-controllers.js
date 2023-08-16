@@ -8,6 +8,7 @@ const UserController = (app) => {
     app.put('/api/users/:uid', updateUser);
 }
 const createUser = (req, res) => {
+    console.log("create user");
     const newUser = req.body;
     newUser._id = (new Date()).getTime() + '';
     users.push(newUser);
@@ -18,8 +19,10 @@ const findUserById = (req, res) => {
     const user = users
         .find(u => u._id === userId);
     res.json(user);
+    console.log("find by id");
 }
 const findUsers = (req, res) => {
+    console.log("find user");
     const type = req.query.type
     if(type) {
         const usersOfType = users
@@ -43,5 +46,6 @@ const updateUser = (req, res) => {
             usr
     );
     res.sendStatus(200);
+    console.log("update user");
 }
 export default UserController
