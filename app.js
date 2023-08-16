@@ -6,12 +6,15 @@ import TuitsController from "./controllers/tuits/tuits-controller.js";
 const app = express();
 import session from "express-session";
 import AuthController from "./users/auth-controller.js";
+import mongoose from "mongoose";
+import "dotenv/config";
 
-
+const CONNECTION_STRING = process.env.DB_CONNECTION_STRING || 'mongodb://127.0.0.1:27017/tuiter'
+mongoose.connect(CONNECTION_STRING);
 app.use(
     cors({
     credentials: true,
-    origin: "http://localhost:3000",
+    origin: process.env.FRONTEND_URL,
     })
 );
 const sessionOptions = {
@@ -19,13 +22,19 @@ const sessionOptions = {
     resave: false,
     saveUninitialized: false,
 };
-app.use(
-    session(sessionOptions)
-);
+if (process.env.NODE_ENV !== "development") {
+    sessionOptions.proxy = true;
+    sessionOptions.cookie = {
+        sameSite: "none",
+        secure: true,
+    };
+}
+app.use(session(sessionOptions));
+
 app.use(express.json());
 TuitsController(app);
 HelloController(app);
 UserController(app);
 AuthController(app);
-app.listen(4000);
+app.listen(process.env.PORT || 4000);
 
